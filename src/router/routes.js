@@ -5,20 +5,20 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/IndexPage.vue') },
       {
-        path: "subnets",
-        component: () =>
-          import("components/SubNet/subnetsCalculator.vue"),
+        path: 'subnets',
+        component: () => import('pages/IndexPage.vue')
+      },
+      {
+        path: 'ipv4-ipv6',
+        component: () => import('pages/IPv4IPv6Page.vue')
       }
     ]
   },
-  
-
-  // Always leave this as last one,
-  // but you can also remove it
   {
     path: '/:catchAll(.*)*',
     component: () => import('pages/ErrorNotFound.vue')
   }
 ]
 
-export default routes
+export default routes;
+
