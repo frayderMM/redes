@@ -19,6 +19,21 @@
       {{ error }}
     </div>
   </div>
+  <q-dialog v-model="showErrorDialog">
+  <q-card>
+    <q-card-section class="row items-center justify-center">
+      <q-img
+        src="statics/rosales.png"
+        style="max-width: 300px; max-height: 300px;"
+        spinner-color="red"
+      />
+    </q-card-section>
+    <q-card-section class="text-center text-negative text-h6">
+      ¡Dirección IP inválida!
+    </q-card-section>
+  </q-card>
+</q-dialog>
+
 </template>
 
 <script>
@@ -27,24 +42,39 @@ export default {
     return {
       inputIP: '',
       result: '',
-      error: ''
+      error: '',
+      showErrorDialog: false,
+      errorAudio: null
     }
+  },
+  mounted() {
+    this.errorAudio = new Audio('statics/error.ogg'); // asegúrate de que este archivo exista
   },
   methods: {
     isIPv4(ip) {
-      const parts = ip.split('.');
-      return parts.length === 4 && parts.every(p => /^\d+$/.test(p) && +p >= 0 && +p <= 255);
+      const parts = ip.trim().split('.');
+      return (
+        parts.length === 4 &&
+        parts.every(p => /^\d+$/.test(p) && +p >= 0 && +p <= 255)
+      );
     },
     isIPv6(ip) {
       return /^([a-fA-F0-9:]+)$/.test(ip) && ip.includes(':');
+    },
+    mostrarError(msg) {
+      this.error = msg;
+      this.result = '';
+      this.showErrorDialog = true;
+      if (this.errorAudio) {
+        this.errorAudio.play();
+      }
     },
     convertToIPv6() {
       this.error = '';
       if (this.isIPv4(this.inputIP)) {
         this.result = `::ffff:${this.inputIP}`;
       } else {
-        this.result = '';
-        this.error = 'La dirección no es una IPv4 válida.';
+        this.mostrarError('La dirección no es una IPv4 válida.');
       }
     },
     convertToIPv4() {
@@ -53,13 +83,13 @@ export default {
       if (match && this.isIPv4(match[1])) {
         this.result = match[1];
       } else {
-        this.result = '';
-        this.error = 'La dirección no es una IPv6 mapeada válida.';
+        this.mostrarError('La dirección no es una IPv6 mapeada válida.');
       }
     }
   }
 }
 </script>
+
 
 <style scoped>
 .container {
