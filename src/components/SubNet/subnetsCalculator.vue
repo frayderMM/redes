@@ -1,19 +1,19 @@
 <template>
   <div class="container">
-    <h1>Subnet Calculator <span title="Helps calculate subnet ranges"></span></h1>
+    <h1>Calculadora de subredes <span title="Helps calculate subnet ranges"></span></h1>
 
-    <h2>Address Block</h2>
+    <h2>Bloque de dirección</h2>
     <p v-if="!isValidNetworkIp" style="color: red;">
       Dirección IP no es una red válida con esta máscara.
     </p>
     <div class="section1">
       <div class="field">
-        <label for="ip">IP address (IPv4)</label>
+        <label for="ip">IP de red (IPv4)</label>
         <input type="text" v-model="ip" />
       </div>
 
       <div class="field">
-        <label for="maskBits">Mask Bits</label>
+        <label for="maskBits">Bits de la máscara</label>
         <div class="stepper">
           <button @click="adjust('maskBits', -1)">−</button>
           <input type="number" v-model.number="maskBits" min="0" max="32" />
@@ -22,7 +22,7 @@
       </div>
 
       <div class="field">
-        <label for="networkMask">Network Mask</label>
+        <label for="networkMask">Máscara</label>
         <input type="text" :value="computedNetmask" readonly class="readonly" />
       </div>
     </div>

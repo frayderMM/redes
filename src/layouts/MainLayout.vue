@@ -1,16 +1,9 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <!-- CABECERA SUPERIOR -->
-    <q-header elevated>
+    <!-- ENCABEZADO -->
+    <q-header elevated class="bg-deep-purple-8 text-white">
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          icon="menu"
-          aria-label="Menu"
-          @click="toggleLeftDrawer"
-        />
+        <q-btn flat dense round icon="menu" aria-label="Menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title>
           Redes IP
@@ -20,37 +13,36 @@
       </q-toolbar>
     </q-header>
 
-    <!-- DRAWER IZQUIERDO -->
-    <q-drawer
-      v-model="leftDrawerOpen"
-      show-if-above
-      bordered
-    >
+    <!-- MENÚ LATERAL -->
+    <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
       <q-list>
-        <q-item-label header>
-          Navegación
-        </q-item-label>
+        <q-item-label header class="text-grey-8">Navegación</q-item-label>
 
-        <q-item
-          v-for="link in linksList"
-          :key="link.title"
-          clickable
-          tag="router-link"
-          :to="link.link"
-        >
+        <!-- Enlace al Subnet Calculator -->
+        <q-item clickable tag="a" to="/subnets">
           <q-item-section avatar>
-            <q-icon :name="link.icon" />
+            <q-icon name="dns" />
           </q-item-section>
-
           <q-item-section>
-            <q-item-label>{{ link.title }}</q-item-label>
-            <q-item-label caption>{{ link.caption }}</q-item-label>
+            <q-item-label>Subnet Calculator</q-item-label>
+            <q-item-label caption>IPv4 subnetting</q-item-label>
+          </q-item-section>
+        </q-item>
+
+        <!-- Enlace al conversor IPv4 ↔ IPv6 -->
+        <q-item clickable tag="a" to="/ipv4-ipv6">
+          <q-item-section avatar>
+            <q-icon name="swap_horiz" />
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>IPv4 ↔ IPv6</q-item-label>
+            <q-item-label caption>Address converter</q-item-label>
           </q-item-section>
         </q-item>
       </q-list>
     </q-drawer>
 
-    <!-- CONTENIDO PRINCIPAL -->
+    <!-- CONTENIDO DE LA PÁGINA -->
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -63,32 +55,20 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'MainLayout',
 
-  data() {
+  data () {
     return {
-      leftDrawerOpen: false,
-
-      linksList: [
-        {
-          title: 'Subnet Calculator',
-          caption: 'IPv4 subnetting',
-          icon: 'calculate',
-          link: '/subnets'
-        },
-        {
-          title: 'IPv4 ↔ IPv6',
-          caption: 'Address converter',
-          icon: 'swap_horiz',
-          link: '/ipv4-ipv6'
-        }
-      ]
+      leftDrawerOpen: false
     }
   },
 
   methods: {
-    toggleLeftDrawer() {
+    toggleLeftDrawer () {
       this.leftDrawerOpen = !this.leftDrawerOpen
     }
   }
 })
 </script>
 
+<style scoped>
+/* Puedes personalizar más aquí si lo deseas */
+</style>
