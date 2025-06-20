@@ -48,7 +48,7 @@ export default {
     }
   },
   mounted() {
-    this.errorAudio = new Audio('statics/error.ogg'); // asegúrate de que este archivo exista
+    this.errorAudio = new Audio('statics/errorR.mp3'); // asegúrate de que este archivo exista
   },
   methods: {
     isIPv4(ip) {
