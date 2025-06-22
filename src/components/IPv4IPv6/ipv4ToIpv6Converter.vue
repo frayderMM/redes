@@ -1,41 +1,53 @@
 <template>
   <div class="outer-container">
-    <div class="container">
-      <h1>Conversor IPv4 / IPv6</h1>
+    <q-card class="converter-card">
+      <q-card-section>
+        <div class="text-h5 text-center text-deep-purple-9">Conversor IPv4 / IPv6</div>
+      </q-card-section>
 
-      <div class="field">
-        <label>Dirección IP</label>
-        <input v-model="inputIP" type="text" placeholder="Ej: 192.168.0.1 o ::ffff:192.168.0.1" />
-      </div>
+      <q-card-section>
+        <div class="q-gutter-md">
+          <q-input
+            v-model="inputIP"
+            label="Dirección IP"
+            outlined
+            dense
+            placeholder="Ej: 192.168.0.1 o ::ffff:192.168.0.1"
+            color="deep-purple"
+            clearable
+          />
+          <div class="q-gutter-sm row justify-center">
+            <q-btn color="deep-purple" icon="east" label="IPv4 → IPv6" @click="convertToIPv6" />
+            <q-btn color="deep-purple" icon="west" label="IPv6 → IPv4" @click="convertToIPv4" />
+          </div>
 
-      <div class="buttons">
-        <button @click="convertToIPv6">IPv4 → IPv6</button>
-        <button @click="convertToIPv4">IPv6 → IPv4</button>
-      </div>
+          <q-banner v-if="result" class="bg-light-green-3 text-dark text-center">
+            <q-icon name="check_circle" class="q-mr-sm" />
+            Resultado: <strong>{{ result }}</strong>
+          </q-banner>
+        </div>
+      </q-card-section>
+    </q-card>
 
-      <div v-if="result" class="result">
-        Resultado: {{ result }}
-      </div>
-
-      <q-dialog v-model="showErrorDialog" persistent transition-show="scale" transition-hide="scale">
-        <q-card class="bg-deep-purple text-white">
-          <q-card-section class="q-pa-none">
-            <q-img
-              src="statics/rosales.png"
-              style="max-width: 500px; max-height: 500px;"
-              spinner-color="white"
-              fit="contain"
-            />
-          </q-card-section>
-          <q-card-section class="text-center text-h6 q-pt-sm">
-            ¡Dirección IP inválida!
-          </q-card-section>
-        </q-card>
-      </q-dialog>
-    </div>
+    <!-- Modal de error -->
+    <q-dialog v-model="showErrorDialog" persistent transition-show="scale" transition-hide="scale">
+      <q-card class="bg-red-4 text-white">
+        <q-card-section class="row items-center q-pa-md">
+          <q-icon name="error_outline" size="3rem" class="q-mr-md" />
+          <div class="text-h6">¡Dirección IP inválida!</div>
+        </q-card-section>
+        <q-card-section class="text-center">
+          <q-img
+            src="statics/rosales.png"
+            style="max-width: 300px;"
+            fit="contain"
+            spinner-color="white"
+          />
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
-
 
 <script>
 export default {
@@ -43,13 +55,12 @@ export default {
     return {
       inputIP: '',
       result: '',
-      error: '',
       showErrorDialog: false,
       errorAudio: null
     };
   },
   mounted() {
-    this.errorAudio = new Audio('statics/errorR.mp3'); // o .ogg si prefieres
+    this.errorAudio = new Audio('statics/errorR.mp3');
   },
   methods: {
     isIPv4(ip) {
@@ -59,101 +70,47 @@ export default {
     isIPv6(ip) {
       return /^([a-fA-F0-9:]+)$/.test(ip) && ip.includes(':');
     },
-    mostrarError(msg) {
+    mostrarError() {
       this.result = '';
-      this.error = msg;
       this.showErrorDialog = true;
-
       if (this.errorAudio) this.errorAudio.play();
-
-      // Cerrar automáticamente a los 3 segundos
       setTimeout(() => {
         this.showErrorDialog = false;
       }, 3000);
     },
     convertToIPv6() {
-      this.error = '';
       if (this.isIPv4(this.inputIP)) {
         this.result = `::ffff:${this.inputIP}`;
       } else {
-        this.mostrarError('La dirección no es una IPv4 válida.');
+        this.mostrarError();
       }
     },
     convertToIPv4() {
-      this.error = '';
       const match = this.inputIP.match(/^::ffff:(\d+\.\d+\.\d+\.\d+)$/);
       if (match && this.isIPv4(match[1])) {
         this.result = match[1];
       } else {
-        this.mostrarError('La dirección no es una IPv6 mapeada válida.');
+        this.mostrarError();
       }
     }
   }
 };
 </script>
 
-
 <style scoped>
-.container {
-  max-width: 600px;
-  margin: auto;
-  padding: 2rem;
-  justify-content: center;
-  background: #ede7f6;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(103, 58, 183, 0.2);
-  font-family: 'Segoe UI', sans-serif;
-  color: #4a148c;
-}
-h1 {
-  text-align: center;
-  margin-bottom: 1rem;
-  color: #6a1b9a;
-}
-.field {
-  margin-bottom: 1rem;
-}
-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #b39ddb;
-  border-radius: 6px;
-  justify-content: center;
-  outline: none;
-}
-.buttons {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
 .outer-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 60px); /* altura útil sin header */
-  background-color: #f3e5f5; /* opcional: fondo morado claro */
+  min-height: calc(100vh - 60px);
+  background-color: #f3e5f5;
   padding: 1rem;
 }
-
-button {
-  background: #7e57c2;
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
-}
-button:hover {
-  background: #5e35b1;
-}
-.result {
-  background: #c5e1a5;
-  padding: 0.5rem;
-  border-radius: 6px;
-  text-align: center;
-  font-weight: bold;
+.converter-card {
+  max-width: 500px;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-radius: 14px;
 }
 </style>

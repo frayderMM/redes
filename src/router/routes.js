@@ -11,6 +11,10 @@ const routes = [
       {
         path: 'ipv4-ipv6',
         component: () => import('pages/IPv4IPv6Page.vue')
+      },
+      {
+        path: 'info',
+        component: () => import('components/INFO/info.vue')
       }
     ]
   },

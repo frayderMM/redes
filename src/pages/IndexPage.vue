@@ -4,7 +4,7 @@
 
 <script>
 import { defineComponent } from 'vue';
-import subnetsCalculator from 'components/SubNet/subnetsCalculator.vue';
+import subnetsCalculator from 'components/SubNet/SubnetCalculator.vue';
 
 export default defineComponent({
   name: 'IndexPage',
