@@ -155,7 +155,7 @@ export default {
       }
     },
     minusNumSubnetANDplusSubnetbits() {
-      if (this.numSubnets > 1) {
+      if (this.numSubnets > 1 && this.subnetBits > 0) {
         this.subnetBits -= 1
         this.numSubnets = Math.pow(2, this.subnetBits)
       }
@@ -197,7 +197,6 @@ export default {
         s.broadcast,
       ])
       const csvContent = [headers, ...rows].map((e) => e.join(',')).join('\n')
-
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
       const url = URL.createObjectURL(blob)
       const link = document.createElement('a')
@@ -309,3 +308,4 @@ input[type='number'] {
   background: #4527a0;
 }
 </style>
+
